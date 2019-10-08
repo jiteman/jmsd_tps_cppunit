@@ -6,6 +6,8 @@
 #include "ClockerModel.h"
 #include <cppunit/config/SourcePrefix.h>
 
+#include "cppunit/Test.h"
+
 
 ClockerModel::ClockerModel()
     : m_testCaseCount( 0 )
@@ -19,14 +21,14 @@ ClockerModel::~ClockerModel()
 }
 
 
-void 
+void
 ClockerModel::setExpectedTestCount( int count )
 {
   m_tests.reserve( count );
 }
 
 
-void 
+void
 ClockerModel::enterTest( CPPUNIT_NS::Test *test,
                          bool isSuite )
 {
@@ -50,11 +52,13 @@ ClockerModel::enterTest( CPPUNIT_NS::Test *test,
 }
 
 
-void 
+void
 ClockerModel::exitTest( CPPUNIT_NS::Test *test,
                         bool isSuite )
 {
   m_tests[ m_testIndexes.top() ].m_timer.finish();
+  m_tests[ m_testIndexes.top() ].is_leaf_ = ( test->getChildTestCount() == 0 );
+
   if ( !isSuite )
     m_totalTestCaseTime += m_tests.back().m_timer.elapsedTime();
 
@@ -63,14 +67,14 @@ ClockerModel::exitTest( CPPUNIT_NS::Test *test,
 }
 
 
-double 
+double
 ClockerModel::totalElapsedTime() const
 {
   return m_tests[0].m_timer.elapsedTime();
 }
 
 
-double 
+double
 ClockerModel::averageTestCaseTime() const
 {
   double average = 0;
@@ -80,14 +84,14 @@ ClockerModel::averageTestCaseTime() const
 }
 
 
-double 
+double
 ClockerModel::testTimeFor( int testIndex ) const
 {
   return m_tests[ testIndex ].m_timer.elapsedTime();
 }
 
 
-std::string 
+std::string
 ClockerModel::timeStringFor( double time )
 {
   char buffer[320];
@@ -107,12 +111,15 @@ ClockerModel::timeStringFor( double time )
 }
 
 
-bool 
+bool
 ClockerModel::isSuite( int testIndex ) const
 {
   return m_tests[ testIndex ].m_isSuite;
 }
 
+bool ClockerModel::is_leaf( int const test_index ) const {
+	return m_tests[ test_index ].is_leaf_;
+}
 
 const CPPUNIT_NS::TestPath &
 ClockerModel::testPathFor( int testIndex ) const
@@ -121,7 +128,7 @@ ClockerModel::testPathFor( int testIndex ) const
 }
 
 
-int 
+int
 ClockerModel::indexOf( CPPUNIT_NS::Test *test ) const
 {
   TestToIndexes::const_iterator itFound = m_testToIndexes.find( test );
@@ -131,15 +138,15 @@ ClockerModel::indexOf( CPPUNIT_NS::Test *test ) const
 }
 
 
-int 
+int
 ClockerModel::childCountFor( int testIndex ) const
 {
   return m_tests[ testIndex ].m_childIndexes.size();
 }
 
 
-int 
-ClockerModel::childAtFor( int testIndex, 
+int
+ClockerModel::childAtFor( int testIndex,
                           int chidIndex ) const
 {
   return m_tests[ testIndex ].m_childIndexes[ chidIndex ];

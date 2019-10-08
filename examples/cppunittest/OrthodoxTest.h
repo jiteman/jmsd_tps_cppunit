@@ -38,7 +38,7 @@ private:
   public:
     Value( int value =0 ) : m_value( value ) {}
 
-    Value( const Value & ) = default;
+	Value( Value const &other ) = default;
 
     Value& operator= ( const Value& v )
     {
@@ -135,7 +135,7 @@ private:
   public:
     ValueBadCall( int value =0 ) : Value( value ) {}
 
-    ValueBadCall( const ValueBadCall & ) : Value()
+	ValueBadCall( const ValueBadCall & ) : Value()
     {
       static int serialNumber = 0;
       m_value = ++serialNumber;

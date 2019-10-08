@@ -12,16 +12,25 @@
 #include <stack>
 #include <string>
 
+#include "std_Timer.h"
+
+typedef std_Timer Timer;
+
+/*
 #ifdef CLOCKER_USE_WINNTTIMER
 #include "WinNtTimer.h"
 typedef WinNtTimer Timer;
 #else
 #include "Timer.h"
 #endif
+*/
+
+
+#include "cuc.h"
 
 
 /// Model that represents test timing.
-class ClockerModel
+class JMSD_CUC_SHARED_INTERFACE ClockerModel
 {
 public:
   /*! Constructs a ClockerModel object.
@@ -50,6 +59,7 @@ public:
   static std::string timeStringFor( double time );
 
   bool isSuite( int testIndex ) const;
+  bool is_leaf( int test_index ) const;
 
   const CPPUNIT_NS::TestPath &testPathFor( int testIndex ) const;
 
@@ -58,7 +68,7 @@ public:
 
   int childCountFor( int testIndex ) const;
 
-  int childAtFor( int testIndex, 
+  int childAtFor( int testIndex,
                   int chidIndex ) const;
 
 private:
@@ -68,6 +78,7 @@ private:
     Timer m_timer;
     bool m_isSuite;
     std::vector<int> m_childIndexes;
+    bool is_leaf_;
   };
 
   /// Prevents the use of the copy constructor.
@@ -78,12 +89,12 @@ private:
 
 private:
   CPPUNIT_NS::TestPath m_currentPath;
-  
+
   int m_testCaseCount;
   double m_totalTestCaseTime;
 
   typedef std::map<CPPUNIT_NS::Test *, int> TestToIndexes;
-  
+
   TestToIndexes m_testToIndexes;
   std::stack<int> m_testIndexes;
   std::vector<TestInfo> m_tests;

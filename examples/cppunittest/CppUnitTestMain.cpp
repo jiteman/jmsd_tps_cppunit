@@ -1,3 +1,5 @@
+#include "CppUnitTestMain.h"
+
 #include <cppunit/CompilerOutputter.h>
 #include <cppunit/TestResult.h>
 #include <cppunit/TestResultCollector.h>
@@ -6,12 +8,16 @@
 #include <cppunit/BriefTestProgressListener.h>
 #include <cppunit/XmlOutputter.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
+
+#include "ClockerModel.h"
+#include "ClockerListener.h"
+//#include "ClockerXmlHook.h"
+
 #include <stdexcept>
 #include <fstream>
 
 
-int 
-main( int argc, char* argv[] )
+int test_cppunit_main( int const argc, char const *const argv[] )
 {
   // Retreive test path from command line first argument. Default to "" which resolve
   // to the top level suite.
@@ -20,9 +26,16 @@ main( int argc, char* argv[] )
   // Create the event manager and test controller
   CPPUNIT_NS::TestResult controller;
 
+	ClockerModel the_model;
+	ClockerListener the_dumper( &the_model, true, false );
+//	ClockerXmlHook the_xmlHook( the_model );
+
+    controller.addListener( &the_dumper );
+
   // Add a listener that colllects test result
   CPPUNIT_NS::TestResultCollector result;
-  controller.addListener( &result );        
+  controller.addListener( &result );
+
 
   // Add a listener that print dots as test run.
 #ifdef WIN32
@@ -30,11 +43,11 @@ main( int argc, char* argv[] )
 #else
   CPPUNIT_NS::BriefTestProgressListener progress;
 #endif
-  controller.addListener( &progress );      
+  controller.addListener( &progress );
 
   // Add the top suite to the test runner
   CPPUNIT_NS::TestRunner runner;
-  runner.addTest( CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest() );   
+  runner.addTest( CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest() );
   try
   {
     CPPUNIT_NS::stdCOut() << "Running "  <<  testPath;
@@ -44,7 +57,7 @@ main( int argc, char* argv[] )
 
     // Print test in a compiler compatible format.
     CPPUNIT_NS::CompilerOutputter outputter( &result, CPPUNIT_NS::stdCOut() );
-    outputter.write(); 
+    outputter.write();
 
 // Uncomment this for XML output
 //    std::ofstream file( "tests.xml" );
@@ -55,7 +68,7 @@ main( int argc, char* argv[] )
   }
   catch ( std::invalid_argument &e )  // Test path not resolved
   {
-    CPPUNIT_NS::stdCOut()  <<  "\n"  
+    CPPUNIT_NS::stdCOut()  <<  "\n"
                             <<  "ERROR: "  <<  e.what()
                             << "\n";
     return 0;

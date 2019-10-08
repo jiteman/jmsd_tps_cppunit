@@ -15,14 +15,14 @@
 #    include <cppunit/config/config-msvc6.h>
 #  endif
 #else
-#    include <cppunit/config-auto.h>
+#    include <cppunit/config/config-auto.h>
 #endif
 
 // Version number of package
-#ifndef CPPUNIT_VERSION 
+#ifndef CPPUNIT_VERSION
 #define CPPUNIT_VERSION  "1.15.0"
 #endif
- 
+
 #include <cppunit/config/CppUnitApi.h>    // define CPPUNIT_API & CPPUNIT_NEED_DLL_DECL
 #include <cppunit/config/SelectDllLoader.h>
 
@@ -44,7 +44,7 @@
 # define CPPUNIT_ENABLE_CU_TEST_MACROS        0
 #endif
 
-/* Define to 1 if the preprocessor expands (#foo) to "foo" (quotes incl.) 
+/* Define to 1 if the preprocessor expands (#foo) to "foo" (quotes incl.)
    I don't think there is any C preprocess that does NOT support this! */
 #if !defined(CPPUNIT_HAVE_CPP_SOURCE_ANNOTATION)
 # define CPPUNIT_HAVE_CPP_SOURCE_ANNOTATION   1
@@ -67,7 +67,7 @@
 #if !defined(CPPUNIT_COMPILER_LOCATION_FORMAT)
 #if defined(__GNUC__) && ( defined(__APPLE_CPP__) || defined(__APPLE_CC__) )
 // gcc/Xcode integration on Mac OS X
-# define CPPUNIT_COMPILER_LOCATION_FORMAT "%p:%l: " 
+# define CPPUNIT_COMPILER_LOCATION_FORMAT "%p:%l: "
 #else
 # define CPPUNIT_COMPILER_LOCATION_FORMAT "%f:%l:"
 #endif
@@ -108,7 +108,7 @@
 #endif  // defined(CPPUNIT_NO_NAMESPACE)
 
 /*! Stringize a symbol.
- * 
+ *
  * Use this macro to convert a preprocessor symbol to a string.
  *
  * Example of usage:
@@ -134,7 +134,7 @@
  * to obtain a 'unique' identifier.
  *
  * \internal From boost documentation:
- * The following piece of macro magic joins the two 
+ * The following piece of macro magic joins the two
  * arguments together, even when one of the arguments is
  * itself a macro (see 16.3.1 in C++ standard).  The key
  * is that macro expansion of macro arguments does not
@@ -163,7 +163,7 @@
 /*! Defines wrap colunm for %CppUnit. Used by CompilerOuputter.
  */
 #if !defined(CPPUNIT_WRAP_COLUMN)
-# define CPPUNIT_WRAP_COLUMN 79
+# define CPPUNIT_WRAP_COLUMN 0
 #endif
 
 #endif // CPPUNIT_PORTABILITY_H

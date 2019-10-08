@@ -8,13 +8,13 @@
 
 
 /*! Returns time spent in the thread.
- * @param rquadTime Receive the time spent in the thread (user+kernel time) 
+ * @param rquadTime Receive the time spent in the thread (user+kernel time)
  *                  in unit of 100 nano-seconds.
  *                  In pratice, the effective resolution is 10ms !!!
  *
  * @return \c true if sucess, \c false otherwise.
  */
-static bool 
+static bool
 GetThreadSpentTime( LONGLONG &rquadTime )
 {
   FILETIME timeCreation;
@@ -46,7 +46,7 @@ GetThreadSpentTime( LONGLONG &rquadTime )
 
 
 
-void 
+void
 WinNtTimer::start()
 {
   m_isValid = GetThreadSpentTime( m_beginTime );
@@ -54,11 +54,11 @@ WinNtTimer::start()
 }
 
 
-void 
+void
 WinNtTimer::finish()
 {
-  LONGLONG quadTimeEnd;
-  LONGLONG quadProcessedElapse;
+  LONGLONG quadTimeEnd = 0;
+  LONGLONG quadProcessedElapse = 0;
   m_isValid = m_isValid  && GetThreadSpentTime( quadTimeEnd );
   if ( m_isValid )
   {
@@ -70,7 +70,7 @@ WinNtTimer::finish()
 }
 
 
-double 
+double
 WinNtTimer::elapsedTime() const
 {
   return m_elapsedTime;

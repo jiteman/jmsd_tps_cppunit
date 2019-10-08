@@ -8,22 +8,31 @@
 
 #include <cppunit/TestListener.h>
 
+
+#include "cuc.h"
+
+
 class ClockerModel;
 
 
 /// TestListener that prints a flatten or hierarchical view of the test tree.
-class ClockerListener : public CPPUNIT_NS::TestListener
+class JMSD_CUC_SHARED_INTERFACE ClockerListener : public CPPUNIT_NS::TestListener
 {
+	double const ACCEPTANCE_TRESHOLD = 2;
+	double const FUNCTIONAL_TRESHOLD = 0.2;
+	double const TOO_LONG_TRESHOLD = 0.02;
+
 public:
   ClockerListener( ClockerModel *model,
-                   bool text );
+                   bool text,
+					bool too_long_only );
 
   virtual ~ClockerListener();
 
-  void startTestRun( CPPUNIT_NS::Test *test, 
+  void startTestRun( CPPUNIT_NS::Test *test,
                      CPPUNIT_NS::TestResult *eventManager );
 
-  void endTestRun( CPPUNIT_NS::Test *test, 
+  void endTestRun( CPPUNIT_NS::Test *test,
                    CPPUNIT_NS::TestResult *eventManager );
 
   void startTest( CPPUNIT_NS::Test *test );
@@ -54,6 +63,7 @@ private:
 private:
   ClockerModel *m_model;
   bool m_text;
+	bool _too_long_only;
 };
 
 

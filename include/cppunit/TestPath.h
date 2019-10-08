@@ -202,5 +202,9 @@ protected:
 
 CPPUNIT_NS_END
 
+#if CPPUNIT_NEED_DLL_DECL
+#pragma warning( pop )
+#endif
+
 #endif // CPPUNIT_TESTPATH_H
 

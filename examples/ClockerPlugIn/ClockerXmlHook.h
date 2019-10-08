@@ -8,12 +8,15 @@
 
 #include <cppunit/XmlOutputterHook.h>
 
+
+#include "cuc.h"
+
+
 class ClockerModel;
 
 
-
 /// XML output hook to add test timing and test hierarchy timing.
-class ClockerXmlHook : public CPPUNIT_NS::XmlOutputterHook
+class JMSD_CUC_SHARED_INTERFACE ClockerXmlHook : public CPPUNIT_NS::XmlOutputterHook
 {
 public:
   /*! Constructs a ClockerXmlHook object.
@@ -44,7 +47,7 @@ private:
   /// Prevents the use of the copy operator.
   void operator =( const ClockerXmlHook &other );
 
-  void addTimedTest( CPPUNIT_NS::XmlElement *parentElement, 
+  void addTimedTest( CPPUNIT_NS::XmlElement *parentElement,
                      int testIndex );
 
 private:
