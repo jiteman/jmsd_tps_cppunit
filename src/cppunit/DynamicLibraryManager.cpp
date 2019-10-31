@@ -36,7 +36,6 @@ DynamicLibraryManager::findSymbol( const std::string &symbol )
   throw DynamicLibraryManagerException( m_libraryName, 
                                         symbol,
                                         DynamicLibraryManagerException::symbolNotFound );
-  return NULL;    // keep compiler happy
 }
 
 
