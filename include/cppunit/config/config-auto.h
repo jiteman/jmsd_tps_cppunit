@@ -45,3 +45,8 @@
 #ifndef CPPUNIT_HAVE__FINITE
 #define CPPUNIT_HAVE__FINITE 1
 #endif
+
+
+#ifndef CPPUNIT_NO_TESTPLUGIN
+#define CPPUNIT_NO_TESTPLUGIN 1
+#endif
