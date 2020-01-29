@@ -20,7 +20,7 @@ CPPUNIT_NS_BEGIN
 
 /*! \brief Traits used by CPPUNIT_ASSERT* macros.
  *
- * Here is an example of specialising these traits: 
+ * Here is an example of specialising these traits:
  *
  * \code
  * template<>
@@ -52,8 +52,8 @@ CPPUNIT_NS_BEGIN
  * \endcode
  */
 template <class T>
-struct assertion_traits 
-{  
+struct assertion_traits
+{
     static bool equal( const T& x, const T& y )
     {
         return x == y;
@@ -75,17 +75,17 @@ struct assertion_traits
     }
 };
 
-/*! \brief Traits used by CPPUNIT_ASSERT_DOUBLES_EQUAL(). 
- * 
- * This specialisation from @c struct @c assertion_traits<> ensures that 
- * doubles are converted in full, instead of being rounded to the default 
- * 6 digits of precision. Use the system defined ISO C99 macro DBL_DIG 
+/*! \brief Traits used by CPPUNIT_ASSERT_DOUBLES_EQUAL().
+ *
+ * This specialisation from @c struct @c assertion_traits<> ensures that
+ * doubles are converted in full, instead of being rounded to the default
+ * 6 digits of precision. Use the system defined ISO C99 macro DBL_DIG
  * within float.h is available to define the maximum precision, otherwise
  * use the hard-coded maximum precision of 15.
  */
 template <>
 struct assertion_traits<double>
-{  
+{
     static bool equal( double x, double y )
     {
         return x == y;
@@ -110,9 +110,9 @@ struct assertion_traits<double>
 #endif  // #ifdef DBL_DIG
        char buffer[128];
 #ifdef __STDC_SECURE_LIB__ // Use secure version with visual studio 2005 to avoid warning.
-       sprintf_s(buffer, sizeof(buffer), "%.*g", precision, x); 
-#else	
-       sprintf(buffer, "%.*g", precision, x); 
+       sprintf_s(buffer, sizeof(buffer), "%.*g", precision, x);
+#else
+       sprintf(buffer, "%.*g", precision, x);
 #endif
        return buffer;
     }
@@ -173,6 +173,25 @@ void assertEquals( const T& expected,
 }
 
 
+/*! \brief (Implementation) Asserts that two objects of the same type are equals.
+ * Use CPPUNIT_ASSERT_EQUAL instead of this function.
+ * \sa assertion_traits, Asserter::failNotEqual().
+ */
+template< class Expected_type, class Actual_type >
+void assertEquals( const Expected_type& expected,
+                   const Actual_type& actual,
+                   SourceLine sourceLine,
+                   const std::string &message )
+{
+	if ( !assertion_traits< Expected_type >::equal( expected, static_cast< Expected_type >( actual ) ) ) { // lazy toString conversion...
+		Asserter::failNotEqual( assertion_traits< Expected_type >::toString( expected ),
+		assertion_traits< Actual_type >::toString( actual ),
+		sourceLine,
+		message );
+	}
+}
+
+
 /*! \brief (Implementation) Asserts that two double are equals given a tolerance.
  * Use CPPUNIT_ASSERT_DOUBLES_EQUAL instead of this function.
  * \sa Asserter::failNotEqual().
@@ -181,7 +200,7 @@ void assertEquals( const T& expected,
 void CPPUNIT_API assertDoubleEquals( double expected,
                                      double actual,
                                      double delta,
-                                     SourceLine sourceLine, 
+                                     SourceLine sourceLine,
                                      const std::string &message );
 
 
@@ -324,7 +343,7 @@ void assertGreaterEqual( const T& expected,
  * Requirement for \a expected and \a actual parameters:
  * - They are exactly of the same type
  * - They are serializable into a std::strstream using operator <<.
- * - They can be compared using operator ==. 
+ * - They can be compared using operator ==.
  *
  * The last two requirements (serialization and comparison) can be
  * removed by specializing the CppUnit::assertion_traits.
@@ -348,7 +367,7 @@ void assertGreaterEqual( const T& expected,
  * Requirement for \a expected and \a actual parameters:
  * - They are exactly of the same type
  * - They are serializable into a std::strstream using operator <<.
- * - They can be compared using operator ==. 
+ * - They can be compared using operator ==.
  *
  * The last two requirements (serialization and comparison) can be
  * removed by specializing the CppUnit::assertion_traits.
@@ -373,7 +392,7 @@ void assertGreaterEqual( const T& expected,
  * Requirement for \a expected and \a actual parameters:
  * - They are exactly of the same type
  * - They are serializable into a std::strstream using operator <<.
- * - They can be compared using operator <. 
+ * - They can be compared using operator <.
  *
  * The last two requirements (serialization and comparison) can be
  * removed by specializing the CppUnit::assertion_traits.
@@ -399,7 +418,7 @@ void assertGreaterEqual( const T& expected,
  * Requirement for \a expected and \a actual parameters:
  * - They are exactly of the same type
  * - They are serializable into a std::strstream using operator <<.
- * - They can be compared using operator<. 
+ * - They can be compared using operator<.
  *
  * The last two requirements (serialization and comparison) can be
  * removed by specializing the CppUnit::assertion_traits.
@@ -425,7 +444,7 @@ void assertGreaterEqual( const T& expected,
  * Requirement for \a expected and \a actual parameters:
  * - They are exactly of the same type
  * - They are serializable into a std::strstream using operator <<.
- * - They can be compared using operator <=. 
+ * - They can be compared using operator <=.
  *
  * The last two requirements (serialization and comparison) can be
  * removed by specializing the CppUnit::assertion_traits.
@@ -451,7 +470,7 @@ void assertGreaterEqual( const T& expected,
  * Requirement for \a expected and \a actual parameters:
  * - They are exactly of the same type
  * - They are serializable into a std::strstream using operator <<.
- * - They can be compared using operator<=. 
+ * - They can be compared using operator<=.
  *
  * The last two requirements (serialization and comparison) can be
  * removed by specializing the CppUnit::assertion_traits.
@@ -463,12 +482,12 @@ void assertGreaterEqual( const T& expected,
                                       (actual),              \
                                       CPPUNIT_SOURCELINE(),    \
                                       "" ) )
-/*! \brief Macro for primitive double value comparisons. 
+/*! \brief Macro for primitive double value comparisons.
  * \ingroup Assertions
  *
  * The assertion pass if both expected and actual are finite and
  * \c fabs( \c expected - \c actual ) <= \c delta.
- * If either \c expected or actual are infinite (+/- inf), the 
+ * If either \c expected or actual are infinite (+/- inf), the
  * assertion pass if \c expected == \c actual.
  * If either \c expected or \c actual is a NaN (not a number), then
  * the assertion fails.
@@ -481,8 +500,8 @@ void assertGreaterEqual( const T& expected,
                                     "" ) )
 
 
-/*! \brief Macro for primitive double value comparisons, setting a 
- * user-supplied message in case of failure. 
+/*! \brief Macro for primitive double value comparisons, setting a
+ * user-supplied message in case of failure.
  * \ingroup Assertions
  * \sa CPPUNIT_ASSERT_DOUBLES_EQUAL for detailed semantic of the assertion.
  */
@@ -494,7 +513,7 @@ void assertGreaterEqual( const T& expected,
                                     CPPUNIT_NS::message_to_string(message) ) )
 
 
-/** Asserts that the given expression throws an exception of the specified type. 
+/** Asserts that the given expression throws an exception of the specified type.
  * \ingroup Assertions
  * Example of usage:
  * \code
@@ -520,8 +539,8 @@ void assertGreaterEqual( const T& expected,
 // implementation detail
 #define CPPUNIT_GET_PARAMETER_STRING( parameter ) #parameter
 
-/** Asserts that the given expression throws an exception of the specified type, 
- * setting a user supplied message in case of failure. 
+/** Asserts that the given expression throws an exception of the specified type,
+ * setting a user supplied message in case of failure.
  * \ingroup Assertions
  * Example of usage:
  * \code
@@ -572,8 +591,8 @@ void assertGreaterEqual( const T& expected,
                                     expression )
 
 
-/** Asserts that the given expression does not throw any exceptions, 
- * setting a user supplied message in case of failure. 
+/** Asserts that the given expression does not throw any exceptions,
+ * setting a user supplied message in case of failure.
  * \ingroup Assertions
  * Example of usage:
  * \code
@@ -616,7 +635,7 @@ void assertGreaterEqual( const T& expected,
    CPPUNIT_ASSERT_THROW( assertion, CPPUNIT_NS::Exception )
 
 
-/** Asserts that an assertion fail, with a user-supplied message in 
+/** Asserts that an assertion fail, with a user-supplied message in
  * case of error.
  * \ingroup Assertions
  * Use to test assertions.
@@ -641,8 +660,8 @@ void assertGreaterEqual( const T& expected,
    CPPUNIT_ASSERT_NO_THROW( assertion )
 
 
-/** Asserts that an assertion pass, with a user-supplied message in 
- * case of failure. 
+/** Asserts that an assertion pass, with a user-supplied message in
+ * case of failure.
  * \ingroup Assertions
  * Use to test assertions.
  * Example of usage:
